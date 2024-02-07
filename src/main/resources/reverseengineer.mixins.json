@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.parcival.reverseengineer.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "ReverseEngineer.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
