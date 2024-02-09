@@ -11,7 +11,7 @@ import net.parcival.reverseengineer.ReverseEngineer;
 
 public class WorkbenchScreen extends AbstractContainerScreen<WorkbenchMenu> {
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(ReverseEngineer.MODID, "textures/gui/blueprint_workbench_gui.png");
+            new ResourceLocation(ReverseEngineer.MODID, "textures/gui/workbench_menu_gui.png");
     public WorkbenchScreen(WorkbenchMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
     }

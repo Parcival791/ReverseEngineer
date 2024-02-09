@@ -1,1 +1,6 @@
 /setblock -7 -61 -6 reverseengineer:blueprint_workbench
+/give @s reverseengineer:blank_blueprint
+/setblock -7 -61 -6 reverseengineer:blueprint_workbench
+/setblock -7 -61 -5 reverseengineer:blueprint_workbench
+/return hi
+/return 1

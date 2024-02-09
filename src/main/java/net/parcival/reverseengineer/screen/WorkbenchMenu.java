@@ -2,20 +2,21 @@ package net.parcival.reverseengineer.screen;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.SlotItemHandler;
+import net.minecraftforge.common.crafting.SimpleCraftingContainer;
+import net.parcival.reverseengineer.ReverseEngineer;
 import net.parcival.reverseengineer.block.ModBlocks;
 import net.parcival.reverseengineer.block.entity.WorkbenchBlockEntity;
+import net.parcival.reverseengineer.screen.slots.CustomResulSlot;
+import net.parcival.reverseengineer.screen.slots.WorkbenchBlueprintSlot;
+import net.parcival.reverseengineer.screen.slots.WorkbenchToolSlot;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.inventory.*;
 
@@ -23,29 +24,39 @@ public class WorkbenchMenu extends AbstractContainerMenu {
 
     public final WorkbenchBlockEntity blockEntity;
     private final Level level;
-    private final ContainerData data;
+
+    private final CraftingContainer craftingContainer = new SimpleCraftingContainer(0,0);
 
 
-    public WorkbenchMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
+
+
+
+    public WorkbenchMenu(int pContainerId, Inventory inv, BlockEntity entity, Container container) {
+
         super(ModMenuTypes.WORKBENCH_MENU.get(), pContainerId);
+        ReverseEngineer.LOGGER.info("constructor 1");
         checkContainerSize(inv, 3);
         blockEntity = ((WorkbenchBlockEntity) entity);
         this.level = inv.player.level();
-        this.data = data;
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
-        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
+        this.addSlot(new WorkbenchBlueprintSlot(container, 0, 27, 32));
+        this.addSlot(new WorkbenchToolSlot(container, 1, 76,32));
+        this.addSlot(new CustomResulSlot(container, 2, 134, 32));
+
+        /*this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
             this.addSlot(new SlotItemHandler(iItemHandler, 0, 27, 32));
             this.addSlot(new SlotItemHandler(iItemHandler, 0, 76, 32));
             this.addSlot(new SlotItemHandler(iItemHandler, 0, 134, 32));
-        });
+        });*/
 
 
     }
     public WorkbenchMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
-        this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(0));
+        this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainer(3));
+        ReverseEngineer.LOGGER.info("constructor 2");
     }
 
     @Override

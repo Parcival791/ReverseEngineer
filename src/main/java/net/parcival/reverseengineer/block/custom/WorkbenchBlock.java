@@ -1,6 +1,7 @@
 package net.parcival.reverseengineer.block.custom;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -11,6 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.parcival.reverseengineer.ReverseEngineer;
 import net.parcival.reverseengineer.block.entity.ModBlockEntities;
 import net.parcival.reverseengineer.block.entity.WorkbenchBlockEntity;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 public class WorkbenchBlock extends BaseEntityBlock {
     public WorkbenchBlock(Properties pProperties) {
         super(pProperties);
+        ReverseEngineer.LOGGER.info("new Block instance");
     }
 
     @Nullable
@@ -31,7 +34,7 @@ public class WorkbenchBlock extends BaseEntityBlock {
         if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
             if (blockEntity instanceof WorkbenchBlockEntity) {
-                ((WorkbenchBlockEntity) blockEntity).drops();
+                //((WorkbenchBlockEntity) blockEntity).drops(); //TODO
             }
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
@@ -39,12 +42,17 @@ public class WorkbenchBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        ReverseEngineer.LOGGER.info("use registered");
         if (pLevel.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
             BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+            ServerPlayer serverPlayer = (ServerPlayer) pPlayer;
+            ReverseEngineer.LOGGER.info(serverPlayer.toString());
             if (blockentity instanceof WorkbenchBlockEntity) {
-                pPlayer.openMenu((WorkbenchBlockEntity) blockentity);
+                ReverseEngineer.LOGGER.info("tried opening menu");
+                serverPlayer.openMenu((WorkbenchBlockEntity) blockentity, buf -> buf.writeBlockPos(pPos));
+                ReverseEngineer.LOGGER.info("after opening menu");
             }
             return InteractionResult.CONSUME;
         }
